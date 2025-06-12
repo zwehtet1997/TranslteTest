@@ -2,34 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Translate Page</title>
+  <title>Translate Page - No Google UI</title>
   <style>
-    /* Hide Google Translate floating banner */
-    .goog-te-banner-frame.skiptranslate {
-      display: none !important;
+    /* Hide the Google Translate iframe banner completely */
+    .skiptranslate > iframe {
+      height: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
     }
     body {
-      top: 0px !important;
+      top: 0 !important;
     }
 
-    /* Hide the Google Translate dropdown UI (we use our own) */
+    /* Hide default Google UI elements */
     #google_translate_element {
-      display: none;
-    }
-
-    /* Hide Google Translate tooltip on top right */
-    .goog-te-gadget-icon, .goog-te-balloon-frame, .goog-tooltip, .goog-tooltip:hover {
       display: none !important;
     }
-
-    /* Remove Powered by Google text */
-    .goog-logo-link {
+    .goog-logo-link, .goog-te-gadget-icon {
       display: none !important;
     }
-
     .goog-te-gadget {
-      height: 0;
-      overflow: hidden;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+    /* Optional: remove tooltip highlights */
+    .VIpgJd-ZVi9od-ORHb-OEVmcd {
+      display: none !important;
     }
   </style>
 </head>
@@ -37,7 +35,7 @@
   <h1>This is my website</h1>
   <p>Choose a language to translate this page:</p>
 
-  <!-- Custom Language Dropdown -->
+  <!-- Custom language selector -->
   <select id="language-selector">
     <option value="">Select Language</option>
     <option value="en">English</option>
@@ -46,10 +44,10 @@
     <option value="zh-CN">Simplified Chinese</option>
   </select>
 
-  <!-- Hidden Google Translate widget -->
+  <!-- Hidden Google Translate element -->
   <div id="google_translate_element"></div>
 
-  <script type="text/javascript">
+  <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
@@ -59,20 +57,19 @@
       }, 'google_translate_element');
     }
 
-    // Language selector logic
+    // Handle dropdown selection
     document.getElementById('language-selector').addEventListener('change', function () {
       const lang = this.value;
       if (!lang) return;
-
-      const googleDropdown = document.querySelector('#google_translate_element select.goog-te-combo');
-      if (googleDropdown) {
-        googleDropdown.value = lang;
-        googleDropdown.dispatchEvent(new Event('change'));
+      const gtCombo = document.querySelector('#google_translate_element select.goog-te-combo');
+      if (gtCombo) {
+        gtCombo.value = lang;
+        gtCombo.dispatchEvent(new Event('change'));
       }
     });
   </script>
 
-  <!-- Google Translate Script -->
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- Load Google Translate -->
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
