@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Multilingual Website with Google Translate</title>
+  <meta charset="UTF-8">
+  <title>Translate Page</title>
   <style>
+    /* Hide Google Translate floating banner */
+    .goog-te-banner-frame.skiptranslate {
+      display: none !important;
+    }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      top: 0px !important;
     }
 
-    .language-selector {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      z-index: 9999;
+    /* Hide the Google Translate dropdown UI (we use our own) */
+    #google_translate_element {
+      display: none;
     }
 
-    select {
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    h1 {
-      color: #d32f2f;
-    }
-
-    /* Hide Google Translate iframe elements if using the widget (optional) */
-    .goog-te-banner-frame.skiptranslate,
-    .goog-logo-link,
-    .goog-te-gadget {
+    /* Hide Google Translate tooltip on top right */
+    .goog-te-gadget-icon, .goog-te-balloon-frame, .goog-tooltip, .goog-tooltip:hover {
       display: none !important;
     }
 
-    body {
-      top: 0px !important;
+    /* Remove Powered by Google text */
+    .goog-logo-link {
+      display: none !important;
+    }
+
+    .goog-te-gadget {
+      height: 0;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
+  <h1>This is my website</h1>
+  <p>Choose a language to translate this page:</p>
 
-  <!-- Language Selector Dropdown -->
-  <div class="language-selector">
-    <select onchange="translatePage(this)">
-      <option value="">🌐 Select Language</option>
-      <option value="en">English</option>
-      <option value="my">Burmese (မြန်မာ)</option>
-      <option value="vi">Vietnamese (Tiếng Việt)</option>
-      <option value="zh-CN">Chinese (简体中文)</option>
-      <option value="fr">French (Français)</option>
-      <option value="es">Spanish (Español)</option>
-      <option value="de">German (Deutsch)</option>
-      <option value="ar">Arabic (العربية)</option>
-      <option value="hi">Hindi (हिंदी)</option>
-    </select>
-  </div>
+  <!-- Custom Language Dropdown -->
+  <select id="language-selector">
+    <option value="">Select Language</option>
+    <option value="en">English</option>
+    <option value="my">Burmese</option>
+    <option value="vi">Vietnamese</option>
+    <option value="zh-CN">Simplified Chinese</option>
+  </select>
 
-  <!-- Website Content -->
-  <h1>Welcome to My Website</h1>
-  <p>This page demonstrates how to offer language switching using Google Translate redirection.</p>
-  <p>Choose a language from the dropdown to view this page translated.</p>
+  <!-- Hidden Google Translate widget -->
+  <div id="google_translate_element"></div>
 
-  <!-- Translation Redirect Script -->
-  <script>
-    function translatePage(select) {
-      const lang = select.value;
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,my,vi,zh-CN',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    // Language selector logic
+    document.getElementById('language-selector').addEventListener('change', function () {
+      const lang = this.value;
       if (!lang) return;
 
-      const currentUrl = window.location.href;
-      const newUrl = `https://translate.google.com/translate?hl=${lang}&sl=auto&tl=${lang}&u=${encodeURIComponent(currentUrl)}`;
-      window.location.href = newUrl;
-    }
+      const googleDropdown = document.querySelector('#google_translate_element select.goog-te-combo');
+      if (googleDropdown) {
+        googleDropdown.value = lang;
+        googleDropdown.dispatchEvent(new Event('change'));
+      }
+    });
   </script>
 
+  <!-- Google Translate Script -->
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
