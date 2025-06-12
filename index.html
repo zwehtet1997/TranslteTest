@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Translate Page</title>
-  <style>
-    /* Hide Google Translate top banner */
-    .goog-te-banner-frame.skiptranslate {
-      display: none !important;
-    }
-    body {
-      top: 0 !important;
-    }
-    /* Hide Google Translate icon */
-    .goog-logo-link {
-      display: none !important;
-    }
-    /* Hide "powered by" text */
-    .goog-te-gadget {
-      color: transparent !important;
-      font-size: 0 !important;
-    }
-  </style>
 </head>
 <body>
   <h1>This is my website</h1>
   <p>Choose a language to translate this page:</p>
 
-  <!-- Dropdown for language -->
-  <select id="language-selector">
+  <!-- Language Dropdown -->
+  <select onchange="translatePage(this)">
     <option value="">Select Language</option>
     <option value="en">English</option>
     <option value="my">Burmese</option>
@@ -35,34 +17,20 @@
     <option value="zh-CN">Simplified Chinese</option>
   </select>
 
-  <!-- Google Translate widget container (hidden) -->
-  <div id="google_translate_element" style="display:none;"></div>
-
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,my,vi,zh-CN',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-
-    // When user changes language in your custom select box,
-    // simulate selecting the language in Google Translate widget
-    document.getElementById('language-selector').addEventListener('change', function() {
-      var lang = this.value;
+  <script>
+    function translatePage(select) {
+      const lang = select.value;
       if (!lang) return;
 
-      var select = document.querySelector('#google_translate_element select.goog-te-combo');
-      if (select) {
-        select.value = lang;
-        // Trigger change event so Google Translate switches language
-        select.dispatchEvent(new Event('change'));
-      }
-    });
-  </script>
+      // Get the current page's full URL
+      const currentUrl = window.location.origin + window.location.pathname;
 
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      // Build the Google Translate redirect URL
+      const newUrl = https://translate.google.com/translate?sl=auto&tl=${lang}&u=${encodeURIComponent(currentUrl)};
+
+      // Redirect in the same tab
+      window.location.href = newUrl;
+    }
+  </script>
 </body>
 </html>
