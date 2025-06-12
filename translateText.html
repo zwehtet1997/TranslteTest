@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Translate Page</title>
+</head>
+<body>
+  <h1>This is my website</h1>
+  <p>Choose a language to translate this page:</p>
+
+  <!-- Language Dropdown -->
+  <select onchange="translatePage(this)">
+    <option value="">Select Language</option>
+    <option value="en">English</option>
+    <option value="my">Burmese</option>
+    <option value="vi">Vietnamese</option>
+    <option value="zh-CN">Simplified Chinese</option>
+  </select>
+
+  <script>
+    function translatePage(select) {
+      const lang = select.value;
+      if (!lang) return;
+
+      // Get the current page's full URL
+      const currentUrl = window.location.origin + window.location.pathname;
+
+      // Build the Google Translate redirect URL
+      const newUrl = `https://translate.google.com/translate?sl=auto&tl=${lang}&u=${encodeURIComponent(currentUrl)}`;
+
+      // Redirect in the same tab
+      window.location.href = newUrl;
+    }
+  </script>
+</body>
+</html>
